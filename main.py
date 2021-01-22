@@ -2,11 +2,11 @@ import pygame
 
 __author__ = "Alex Sohrab"
 
+# Set the window size and title
 screen = pygame.display.set_mode([750, 750])
-
 pygame.display.set_caption("11 Robot Tactics")
 
-# Needed colors
+# Colors
 BLUE = (0, 0, 255)
 GREEN = (0, 255, 0)
 
@@ -17,15 +17,18 @@ background = pygame.Surface((750, 750))
 class FriendlyBot:
     """"Class that creates bot units to populate the screen."""
     def __init__(self, position, color, radius):
+        """Initializing the bot position and color"""
         self.x, self.y = position
         self.radius = radius
         self.color = color
         self.thickness = 100
 
     def __hash__(self):
+        """Hash function for bots stored in structure"""
         return hash(self.x) ^ hash(self.y)
 
     def display(self):
+        """Display the bot"""
         pygame.draw.circle(screen, self.color, (self.x, self.y), self.radius, self.thickness)
 
     def update(self, new_position):
