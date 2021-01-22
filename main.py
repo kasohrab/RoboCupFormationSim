@@ -10,6 +10,7 @@ pygame.display.set_caption("11 Robot Tactics")
 BLUE = (0, 0, 255)
 GREEN = (0, 255, 0)
 
+# Maybe will make background for each bot as needed instead
 background = pygame.Surface((750, 750))
 
 
@@ -39,6 +40,8 @@ class FriendlyBot:
 
 def start_sim():
     """"Method that starts the simulation"""
+    # TODO : Add a data structure that stores all FriendlyBot objects
+
     pygame.init()
 
     running = True
@@ -46,6 +49,8 @@ def start_sim():
     bot_radius = 25
 
     # Game loop
+    # TODO : Add click and move functionality
+    #        long term add robot response to the movement of others
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
