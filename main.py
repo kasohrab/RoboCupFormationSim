@@ -14,11 +14,11 @@ background = pygame.Surface((750, 750))
 
 
 class FriendlyBot:
-    """"Class that creates bot units to populate the screen."""
+    """"Class that creates bot units to populate the screen"""
     def __init__(self, position=(0, 0)):
         """Initializing the bot position and color"""
         self.x, self.y = position
-        self.radius = 25
+        self.radius = 20
         self.color = BLUE
         self.thickness = 100
 
@@ -45,11 +45,25 @@ def start_sim():
     player_list = []
     player_count = 0
 
-    # TODO : Set bot positions in loop
     while player_count < 11:
         player_list.append(FriendlyBot())
         player_count += 1
 
+    defense_width = 175
+    midfield_width = 275
+    attack_width = 175
+    # Set player initial positions where (0,0) is top left
+    player_list[0].update((375, 725))
+    player_list[1].update((375 - defense_width, 600))
+    player_list[2].update((375, 600))
+    player_list[3].update((375 + defense_width, 600))
+    player_list[4].update((375 - midfield_width, 425))
+    player_list[5].update((375 - midfield_width/3, 425))
+    player_list[6].update((375 + midfield_width/3, 425))
+    player_list[7].update((375 + midfield_width, 425))
+    player_list[8].update((375 - attack_width, 250))
+    player_list[9].update((375 + attack_width, 250))
+    player_list[10].update((375, 125))
 
     # Game loop
     # TODO : Add click and move functionality
@@ -59,23 +73,11 @@ def start_sim():
             if event.type == pygame.QUIT:
                 running = False
 
-            screen.fill((255, 255, 255))
+            screen.fill((0, 0, 0))
 
-            # Testing if circles appear correctly in different cases
-            one = FriendlyBot((150, 50))
-            player_list[1].update((500, 450))
+            for player in player_list:
+                player.display()
 
-            one.display()
-
-            one.update((150, 200))
-
-            two = FriendlyBot((350, 350))
-
-            two.update((600, 490))
-
-            two.display()
-            one.display()
-            player_list[1].display()
             pygame.display.flip()
 
     pygame.quit()
