@@ -44,6 +44,8 @@ class FriendlyBot:
 
 
 def create_formation(defenders_count, midfielders_count, attackers_count, strikers_count):
+    """Creates initial formation and positions that the robots will go to"""
+    # TODO: account for edge cases (where the inputs do not create a valid formation)
     player_list = []
     player_count = 0
     while player_count < 11:
@@ -66,19 +68,22 @@ def create_formation(defenders_count, midfielders_count, attackers_count, strike
         player_list[index].update((count * defense_width, 840))
         count += 1
         index += 1
+
     # Midfielders
     count = 1
     while count <= midfielders_count:
         player_list[index].update((count * midfield_width, 750))
         count += 1
         index += 1
+
     # Attackers
     count = 1
     while count <= attackers_count:
         player_list[index].update((count * attack_width, 660))
         count += 1
         index += 1
-    #Strikers
+
+    # Strikers
     count = 1
     while count <= strikers_count:
         player_list[index].update((count * strikers_width, 600))
