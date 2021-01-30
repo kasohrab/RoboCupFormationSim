@@ -48,6 +48,7 @@ def create_formation(defenders, midfielders, attackers):
         player_list.append(FriendlyBot())
         player_count += 1
 
+    # TODO: make general function to initialize formation based on how many d,m,a are inputted
     defense_width = 175
     midfield_width = 275
     attack_width = 175
