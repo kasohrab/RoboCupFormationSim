@@ -1,3 +1,4 @@
+import math
 import pygame
 
 __author__ = "Alex Sohrab"
@@ -14,8 +15,9 @@ pygame.display.set_caption("11 Robot Tactics")
 # Colors
 BLUE = (0, 0, 255)
 GREEN = (0, 255, 0)
+WHITE = (255, 250, 250)
 
-background = pygame.Surface((750, 750))
+background = pygame.Surface((field_width, field_height))
 
 
 class FriendlyBot:
@@ -41,29 +43,44 @@ class FriendlyBot:
         self.x, self.y = new_position
 
 
-def create_formation(defenders, midfielders, attackers):
+def formation_factor(count):
+    if count > 2:
+        return count + ((count ** 2) - (9.5 * count) + 20.5)
+    else:
+        return count + 1
+
+
+def create_formation(defenders_count, midfielders_count, attackers_count, strikers_count):
     player_list = []
     player_count = 0
     while player_count < 11:
         player_list.append(FriendlyBot())
         player_count += 1
 
-    # TODO: make general function to initialize formation based on how many d,m,a are inputted
-    defense_width = 175
-    midfield_width = 275
-    attack_width = 175
+    defense_factor = formation_factor(defenders_count)
+    midfielders_factor = formation_factor(midfielders_count)
+    defense_width = (field_width/defense_factor) * math.floor(math.log2(defenders_count))
+    midfield_width = (field_width/midfielders_factor) / math.floor(math.log2(midfielders_count))
+    attack_width = (field_width/(attackers_count + 1)) / math.floor(math.log2(attackers_count))
     # Set player initial positions where (0,0) is top left
-    player_list[0].update((375.5, 725))
-    player_list[1].update((375 - defense_width, 600))
-    player_list[2].update((375, 600))
-    player_list[3].update((375 + defense_width, 600))
-    player_list[4].update((375 - midfield_width, 425))
-    player_list[5].update((375 - midfield_width/3, 425))
-    player_list[6].update((375 + midfield_width/3, 425))
-    player_list[7].update((375 + midfield_width, 425))
-    player_list[8].update((375 - attack_width, 250))
-    player_list[9].update((375 + attack_width, 250))
-    player_list[10].update((375, 125))
+
+    # Sweeper Keeper
+    player_list[0].update((field_width/2, field_height - 20))
+
+    count = 1
+    index = 1
+    # Defenders
+    while count <= defenders_count:
+        player_list[index].update((defense_width * count, 820))
+        count += 1
+        index += 1
+    # Midfielders
+    count = 1
+    while count <= midfielders_count:
+        player_list[index].update((midfield_width * count, 800))
+        count += 1
+        index += 1
+
     return player_list
 
 
@@ -72,7 +89,7 @@ def start_sim():
 
     pygame.init()
 
-    player_list = create_formation(3, 4, 4)
+    player_list = create_formation(2, 5, 2, 1)
     running = True
 
     # Game loop
@@ -84,7 +101,8 @@ def start_sim():
                 running = False
 
             screen.fill((0, 0, 0))
-
+            # Halfway line
+            pygame.draw.line(screen, WHITE, (0, field_height/2), (field_width, field_height/2))
             for player in player_list:
                 player.display()
 
