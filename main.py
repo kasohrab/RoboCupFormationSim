@@ -3,7 +3,12 @@ import pygame
 __author__ = "Alex Sohrab"
 
 # Set the window size and title
-screen = pygame.display.set_mode([750, 750])
+# Robocup SSL is played on a 9 m long by 6 m wide field
+field_height = 900
+field_width = int(field_height * (2 / 3))
+
+# Each unit represents a centimeter
+screen = pygame.display.set_mode([field_width, field_height])
 pygame.display.set_caption("11 Robot Tactics")
 
 # Colors
@@ -18,7 +23,8 @@ class FriendlyBot:
     def __init__(self, position=(0, 0)):
         """Initializing the bot position and color"""
         self.x, self.y = position
-        self.radius = 20
+        # Max radius of SSL robot is 9 cm
+        self.radius = 9
         self.color = BLUE
         self.thickness = 100
 
@@ -35,16 +41,9 @@ class FriendlyBot:
         self.x, self.y = new_position
 
 
-def start_sim():
-    """"Method that starts the simulation"""
-
-    pygame.init()
-
-    running = True
-
+def create_formation(defenders, midfielders, attackers):
     player_list = []
     player_count = 0
-
     while player_count < 11:
         player_list.append(FriendlyBot())
         player_count += 1
@@ -53,7 +52,7 @@ def start_sim():
     midfield_width = 275
     attack_width = 175
     # Set player initial positions where (0,0) is top left
-    player_list[0].update((375, 725))
+    player_list[0].update((375.5, 725))
     player_list[1].update((375 - defense_width, 600))
     player_list[2].update((375, 600))
     player_list[3].update((375 + defense_width, 600))
@@ -64,6 +63,16 @@ def start_sim():
     player_list[8].update((375 - attack_width, 250))
     player_list[9].update((375 + attack_width, 250))
     player_list[10].update((375, 125))
+    return player_list
+
+
+def start_sim():
+    """"Method that starts the simulation"""
+
+    pygame.init()
+
+    player_list = create_formation(3, 4, 4)
+    running = True
 
     # Game loop
     # TODO : Add click and move functionality
