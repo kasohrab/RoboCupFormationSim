@@ -43,13 +43,6 @@ class FriendlyBot:
         self.x, self.y = new_position
 
 
-def formation_factor(count):
-    if count > 2:
-        return count + ((count ** 2) - (9.5 * count) + 20.5)
-    else:
-        return count + 1
-
-
 def create_formation(defenders_count, midfielders_count, attackers_count, strikers_count):
     player_list = []
     player_count = 0
@@ -57,11 +50,10 @@ def create_formation(defenders_count, midfielders_count, attackers_count, strike
         player_list.append(FriendlyBot())
         player_count += 1
 
-    defense_factor = formation_factor(defenders_count)
-    midfielders_factor = formation_factor(midfielders_count)
-    defense_width = (field_width/defense_factor) * math.floor(math.log2(defenders_count))
-    midfield_width = (field_width/midfielders_factor) / math.floor(math.log2(midfielders_count))
-    attack_width = (field_width/(attackers_count + 1)) / math.floor(math.log2(attackers_count))
+    defense_width = field_width/(defenders_count + 1)
+    midfield_width = (field_width/(midfielders_count + 1))
+    attack_width = (field_width/(attackers_count + 1))
+    strikers_width = (field_width / (strikers_count + 1))
     # Set player initial positions where (0,0) is top left
 
     # Sweeper Keeper
@@ -71,13 +63,25 @@ def create_formation(defenders_count, midfielders_count, attackers_count, strike
     index = 1
     # Defenders
     while count <= defenders_count:
-        player_list[index].update((defense_width * count, 820))
+        player_list[index].update((count * defense_width, 840))
         count += 1
         index += 1
     # Midfielders
     count = 1
     while count <= midfielders_count:
-        player_list[index].update((midfield_width * count, 800))
+        player_list[index].update((count * midfield_width, 750))
+        count += 1
+        index += 1
+    # Attackers
+    count = 1
+    while count <= attackers_count:
+        player_list[index].update((count * attack_width, 660))
+        count += 1
+        index += 1
+    #Strikers
+    count = 1
+    while count <= strikers_count:
+        player_list[index].update((count * strikers_width, 600))
         count += 1
         index += 1
 
@@ -89,7 +93,7 @@ def start_sim():
 
     pygame.init()
 
-    player_list = create_formation(2, 5, 2, 1)
+    player_list = create_formation(3, 4, 2, 1)
     running = True
 
     # Game loop
