@@ -3,6 +3,10 @@ import pygame
 
 __author__ = "Alex Sohrab"
 
+# Set the pygame icon
+icon = pygame.image.load('Images/robosim.png')
+pygame.display.set_icon(icon)
+
 # Set the window size and title
 # Robocup SSL is played on a 9 m long by 6 m wide field
 field_height = 900
