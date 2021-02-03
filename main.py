@@ -18,6 +18,7 @@ pygame.display.set_caption("11 Robot Tactics")
 
 # Colors
 BLUE = (0, 0, 255)
+RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 WHITE = (255, 250, 250)
 
@@ -38,7 +39,7 @@ class FriendlyBot:
         """Display the bot"""
         pygame.draw.circle(screen, self.color, (self.x, self.y), self.radius, self.thickness)
 
-    def update(self, new_position):
+    def update_position(self, new_position):
         """Cleans screen then updates position.
 
         Need to call display on all other bots after updating.
@@ -50,6 +51,7 @@ class FriendlyBot:
 def create_formation(defenders_count, midfielders_count, attackers_count, strikers_count):
     """Creates initial formation and positions that the robots will go to"""
     # TODO: account for edge cases (where the inputs do not create a valid formation)
+    # TODO: relative to center and ball (adjust width and depth)
     player_list = []
     player_count = 0
     while player_count < 11:
@@ -59,38 +61,38 @@ def create_formation(defenders_count, midfielders_count, attackers_count, strike
     defense_width = field_width/(defenders_count + 1)
     midfield_width = (field_width/(midfielders_count + 1))
     attack_width = (field_width/(attackers_count + 1))
-    strikers_width = (field_width / (strikers_count + 1))
+    strikers_width = (field_width/(strikers_count + 1))
     # Set player initial positions where (0,0) is top left
 
     # Sweeper Keeper
-    player_list[0].update((field_width/2, field_height - 20))
+    player_list[0].update_position((field_width / 2, field_height - 20))
 
     count = 1
     index = 1
     # Defenders
     while count <= defenders_count:
-        player_list[index].update((count * defense_width, 840))
+        player_list[index].update_position((count * defense_width, 840))
         count += 1
         index += 1
 
     # Midfielders
     count = 1
     while count <= midfielders_count:
-        player_list[index].update((count * midfield_width, 750))
+        player_list[index].update_position((count * midfield_width, 750))
         count += 1
         index += 1
 
     # Attackers
     count = 1
     while count <= attackers_count:
-        player_list[index].update((count * attack_width, 660))
+        player_list[index].update_position((count * attack_width, 660))
         count += 1
         index += 1
 
     # Strikers
     count = 1
     while count <= strikers_count:
-        player_list[index].update((count * strikers_width, 600))
+        player_list[index].update_position((count * strikers_width, 600))
         count += 1
         index += 1
 
@@ -109,17 +111,29 @@ def start_sim():
     # TODO : Add click and move functionality
     #        long term add robot response to the movement of others
     while running:
+        # Event loop
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            elif event.type == pygame.MOUSEBUTTONUP:
+                # Calculate the x and y distances between the mouse and the center.
+                mouse_pos = pygame.mouse.get_pos()
 
-            screen.fill((0, 0, 0))
-            # Halfway line
-            pygame.draw.line(screen, WHITE, (0, field_height/2), (field_width, field_height/2))
-            for player in player_list:
-                player.display()
+                # Looking at each player in the formation
+                for player in player_list:
+                    dist_x = mouse_pos[0] - player.x
+                    dist_y = mouse_pos[1] - player.y
+                    # Check if click is within bounds of a bot
+                    if math.hypot(dist_x, dist_y) < player.radius:
+                        print('collision')
 
-            pygame.display.flip()
+        screen.fill((0, 0, 0))
+        # Halfway line
+        pygame.draw.line(screen, WHITE, (0, field_height/2), (field_width, field_height/2))
+        for player in player_list:
+            player.display()
+
+        pygame.display.flip()
 
     pygame.quit()
 
