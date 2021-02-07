@@ -125,7 +125,8 @@ def start_sim():
                     dist_y = mouse_pos[1] - player.y
                     # Check if click is within bounds of a bot
                     if math.hypot(dist_x, dist_y) < player.radius:
-                        print('collision')
+                        print('collision at ' + str(player.x) + ', ' + str(player.y) + '. The click was ' +
+                              str(dist_x) + ', ' + str(dist_y) + ' from the center of the player')
 
         screen.fill((0, 0, 0))
         # Halfway line
