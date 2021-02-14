@@ -10,8 +10,9 @@ def start_sim():
 
     pygame.init()
 
-    player_list = Formation.create_formation(3, 4, 2, 1)
     formation = Formation()
+    player_list = formation.create_formation(3, 4, 2, 1)
+
     running = True
 
     # Game loop

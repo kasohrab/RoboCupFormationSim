@@ -1,6 +1,7 @@
 from references import *
 from bot import FriendlyBot
 
+
 class Formation:
     """Formation class"""
     def __init__(self):
@@ -8,7 +9,7 @@ class Formation:
         center = (field_width * .75, field_height * .75)
         pygame.draw.circle(screen, GREEN, center, 1, 100)
 
-    def create_formation(defenders_count, midfielders_count, attackers_count, strikers_count):
+    def create_formation(self, defenders_count, midfielders_count, attackers_count, strikers_count):
         """Creates initial formation and positions that the robots will go to"""
         # TODO: account for edge cases (where the inputs do not create a valid formation)
         # TODO: relative to center and ball (adjust width and depth)
