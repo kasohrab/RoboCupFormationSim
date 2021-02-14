@@ -48,6 +48,10 @@ class FriendlyBot:
         self.x, self.y = new_position
 
 
+class Formation:
+    """Formation class"""
+
+
 def create_formation(defenders_count, midfielders_count, attackers_count, strikers_count):
     """Creates initial formation and positions that the robots will go to"""
     # TODO: account for edge cases (where the inputs do not create a valid formation)
