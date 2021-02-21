@@ -35,6 +35,8 @@ def start_sim():
                     if math.hypot(dist_x, dist_y) < player.radius:
                         print('collision at ' + str(player.x) + ', ' + str(player.y) + '. The click was ' +
                               str(dist_x) + ', ' + str(dist_y) + ' from the center of the player')
+                        player.x += dist_x
+                        player.y += dist_y
 
         screen.fill((0, 0, 0))
         # Halfway line
