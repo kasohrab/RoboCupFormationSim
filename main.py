@@ -37,11 +37,12 @@ def start_sim():
                               str(dist_x) + ', ' + str(dist_y) + ' from the center of the player')
 
         screen.fill((0, 0, 0))
+        # Formation center
+        pygame.draw.circle(screen, GREEN, formation.center, 3, 80)
         # Halfway line
         pygame.draw.line(screen, WHITE, (0, field_height/2), (field_width, field_height/2))
         for player in player_list:
             player.display()
-
         pygame.display.flip()
 
     pygame.quit()
