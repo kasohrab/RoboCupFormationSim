@@ -87,6 +87,21 @@ class Formation:
         """
         return self.player_list
 
-    def move_center(self, position=(0, 0)):
+    def move_center(self, player_list=None, increment=(0, 0)):
         """Moves the center and the bots move to keep in line with it.
+        """
+        if player_list is None:
+            player_list = []
+
+        for bot in player_list:
+            bot.update_position(tuple(x+y for x, y in zip((bot.x, bot.y), increment)))
+
+        self.center = tuple(x+y for x, y in zip(self.center, increment))
+
+    def update_width(self):
+        """Expand or contract the width of the formation depending on the circumstance.
+        """
+
+    def update_depth(self):
+        """Push the formation lines up or back the pitch.
         """

@@ -14,6 +14,8 @@ def start_sim():
     player_list = formation.create_formation(3, 4, 2, 1)
 
     running = True
+    # Test move_center here
+    formation.move_center(player_list, (0, 0))
 
     # Game loop
     # TODO : Add click and move functionality
