@@ -2,7 +2,7 @@ import math
 from formation import Formation
 from references import *
 
-__author__ = "Alex Sohrab"
+__author__ = "Alex Sohrab & Shail Patel"
 
 
 def start_sim():
@@ -14,6 +14,8 @@ def start_sim():
     player_list = formation.create_formation(3, 4, 2, 1)
 
     running = True
+    # Test move_center here
+    formation.move_center(player_list, (0, 0))
 
     # Game loop
     # TODO : Add click and move functionality
@@ -39,11 +41,12 @@ def start_sim():
                         player.y += dist_y
 
         screen.fill((0, 0, 0))
+        # Formation center
+        pygame.draw.circle(screen, GREEN, formation.center, 3, 80)
         # Halfway line
         pygame.draw.line(screen, WHITE, (0, field_height/2), (field_width, field_height/2))
         for player in player_list:
             player.display()
-
         pygame.display.flip()
 
     pygame.quit()
