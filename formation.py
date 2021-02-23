@@ -5,14 +5,13 @@ from bot import FriendlyBot
 class Formation:
     """Formation class"""
 
-    def __init__(self, center=(field_width * .75, field_height * .75),
-                 goalkeeper_depth=field_height - 20, defense_depth=840, midfielders_depth=750,
+    def __init__(self, goalkeeper_depth=field_height - 20, defense_depth=840, midfielders_depth=750,
                  attackers_depth=660, strikers_depth=600):
         """Initializing the formation data"""
         self.player_list = []
 
         # variables that help define the center of the formation
-        self.center = center
+        self.center = None
         self.goalkeeper_depth = goalkeeper_depth
         self.defense_depth = defense_depth
         self.midfielders_depth = midfielders_depth
