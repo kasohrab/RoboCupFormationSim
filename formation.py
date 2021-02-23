@@ -5,17 +5,19 @@ from bot import FriendlyBot
 class Formation:
     """Formation class"""
 
-    def __init__(self):
+    def __init__(self, center=(field_width * .75, field_height * .75),
+                 goalkeeper_depth=field_height - 20, defense_depth=840, midfielders_depth=750,
+                 attackers_depth=660, strikers_depth=600):
         """Initializing the formation data"""
         self.player_list = []
 
         # variables that help define the center of the formation
-        self.center = (field_width * .75, field_height * .75)
-        self.goalkeeper_depth = field_height - 20
-        self.defense_depth = 840
-        self.midfielders_depth = 750
-        self.attackers_depth = 660
-        self.strikers_depth = 600
+        self.center = center
+        self.goalkeeper_depth = goalkeeper_depth
+        self.defense_depth = defense_depth
+        self.midfielders_depth = midfielders_depth
+        self.attackers_depth = attackers_depth
+        self.strikers_depth = strikers_depth
 
     def create_formation(self, defenders_count, midfielders_count, attackers_count, strikers_count):
         """Creates initial formation and positions that the robots will go to
@@ -94,14 +96,16 @@ class Formation:
             player_list = []
 
         for bot in player_list:
-            bot.update_position(tuple(x+y for x, y in zip((bot.x, bot.y), increment)))
+            bot.update_position(tuple(x + y for x, y in zip((bot.x, bot.y), increment)))
 
-        self.center = tuple(x+y for x, y in zip(self.center, increment))
+        # Like taking Cartesian product of center & increment then summing each of their values
+        # Then the xth sum is stored as xth index in the tuple
+        self.center = tuple(x + y for x, y in zip(self.center, increment))
 
-    def update_width(self):
+    def update_width(self, factor):
         """Expand or contract the width of the formation depending on the circumstance.
         """
 
-    def update_depth(self):
+    def update_depth(self, factor):
         """Push the formation lines up or back the pitch.
         """

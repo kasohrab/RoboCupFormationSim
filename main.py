@@ -2,7 +2,7 @@ import math
 from formation import Formation
 from references import *
 
-__author__ = "Alex Sohrab"
+__author__ = "Alex Sohrab & Shail Patel"
 
 
 def start_sim():
