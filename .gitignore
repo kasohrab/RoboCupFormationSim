@@ -1,4 +1,4 @@
 # ignore local files
-/.idea/
-/__pycache__/
-/todo.txt/
+.idea
+__pycache__
+todo.txt
