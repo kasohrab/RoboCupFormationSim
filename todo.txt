@@ -1,2 +1,0 @@
-TODO:
-Make main.py so that whenever it clicks, it will actually reflect on the screen
