@@ -10,9 +10,10 @@ def start_sim():
 
     pygame.init()
 
-    formation = Formation()
-    player_list = formation.create_formation(3, 4, 2, 1)
-
+    formation = Formation(11)
+    formation.set_positions(3, 4, 2, 1)
+    formation.update_width(.3)
+    player_list = formation.create_formation()
     running = True
     # Test move_center here
     formation.move_center(player_list, (0, 0))
