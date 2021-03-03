@@ -3,6 +3,7 @@ from references import *
 
 class FriendlyBot:
     """"Class that creates bot units to populate the screen"""
+
     def __init__(self, position=(0, 0)):
         """Initializing the bot position and color"""
         self.x, self.y = position
@@ -22,3 +23,6 @@ class FriendlyBot:
         """
         screen.blit(background, (0, 0))
         self.x, self.y = new_position
+
+    def get_position(self):
+        return self.x, self.y

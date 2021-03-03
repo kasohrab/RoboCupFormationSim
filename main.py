@@ -10,9 +10,8 @@ def start_sim():
 
     pygame.init()
 
-    formation = Formation(11)
+    formation = Formation(11, field_width)
     formation.set_positions(3, 4, 2, 1)
-    formation.update_width(.3)
     player_list = formation.create_formation()
     running = True
     # Test move_center here
@@ -45,7 +44,7 @@ def start_sim():
         # Formation center
         pygame.draw.circle(screen, GREEN, formation.center, 3, 80)
         # Halfway line
-        pygame.draw.line(screen, WHITE, (0, field_height/2), (field_width, field_height/2))
+        pygame.draw.line(screen, WHITE, (0, field_depth / 2), (field_width, field_depth / 2))
         for player in player_list:
             player.display()
         pygame.display.flip()
