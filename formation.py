@@ -41,7 +41,6 @@ class Formation:
 
         # set the width of each row
         self.defense_width = self.total_width / (defenders_count + 1)
-        print(self.defense_width)
         self.midfield_width = (self.total_width / (midfielders_count + 1))
         self.attack_width = (self.total_width / (attackers_count + 1))
         self.strikers_width = (self.total_width / (strikers_count + 1))
@@ -57,6 +56,9 @@ class Formation:
         # TODO: account for edge cases (where the inputs do not create a valid formation)
         # TODO: relative to center and ball (adjust width and depth)
 
+        # add this to allow formation to be adjustable to any width
+        shift_left = (field_width / 2) - self.total_width / 2
+
         # Set player initial positions where (0,0) is top left
 
         # Sweeper Keeper
@@ -64,19 +66,19 @@ class Formation:
 
         count = 1
         index = 1
+
         # Defenders
         while count <= self.defenders_count:
             self.player_list[index].\
-                update_position((count * self.defense_width, 840))
+                update_position((count * self.defense_width + shift_left, 840))
             count += 1
             index += 1
 
         # Midfielders
-        # + self.midfield_width * ((self.midfielders_count + 1)/2)
         count = 1
         while count <= self.midfielders_count:
             self.player_list[index].\
-                update_position((count * self.midfield_width, 750))
+                update_position((count * self.midfield_width + shift_left, 750))
             count += 1
             index += 1
 
@@ -84,7 +86,7 @@ class Formation:
         count = 1
         while count <= self.attackers_count:
             self.player_list[index].\
-                update_position((count * self.attack_width, 660))
+                update_position((count * self.attack_width + shift_left,  660))
             count += 1
             index += 1
 
@@ -92,14 +94,13 @@ class Formation:
         count = 1
         while count <= self.strikers_count:
             self.player_list[index].\
-                update_position((count * self.strikers_width, 600))
+                update_position((count * self.strikers_width + shift_left, 600))
             count += 1
             index += 1
 
         # set center to average of positions
         # maybe there is a better place for this?
         self.center = [sum(y) / len(y) for y in zip(*self.get_positions())]
-        [print(y) for y in zip(*self.get_positions())]
 
         return self.player_list
 
