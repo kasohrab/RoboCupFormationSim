@@ -1,6 +1,7 @@
 import math
 from formation import Formation
 from references import *
+from bot import FriendlyBot
 
 __author__ = "Alex Sohrab & Shail Patel"
 
@@ -16,6 +17,11 @@ def start_sim():
     running = True
     # Test move_center here
     formation.move_center(player_list, (0, 0))
+
+    # stores the last clicked bot
+    # we can update this when the user clicks on a bot
+    # then the user can use arrow keys to move it
+    last_clicked_player = None
 
     # Game loop
     # TODO : Add click and move functionality
@@ -40,6 +46,8 @@ def start_sim():
                               str(dist_x) + ', ' + str(dist_y) + ' from the center of the player')
                         player.x += dist_x
                         player.y += dist_y
+                        last_clicked_player = player
+                        print(last_clicked_player)
 
         screen.fill((0, 0, 0))
         # Formation center

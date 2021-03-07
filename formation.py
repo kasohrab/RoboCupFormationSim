@@ -8,6 +8,9 @@ class Formation:
     def __init__(self, num_bots, total_width):
         """Initializing the formation data"""
 
+        if num_bots != 11 | num_bots != 6:
+            raise ValueError("Only 6 and 11 player formations are supported.")
+
         self.player_list = []
         player_count = 0
         while player_count < num_bots:
@@ -53,7 +56,6 @@ class Formation:
         """Creates initial formation and positions that the robots will go to
         """
 
-        # TODO: account for edge cases (where the inputs do not create a valid formation)
         # TODO: relative to center and ball (adjust width and depth)
 
         # add this to allow formation to be adjustable to any width
