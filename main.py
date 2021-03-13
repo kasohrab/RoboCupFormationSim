@@ -1,9 +1,13 @@
 import math
+
 from formation import Formation
 from references import *
-from bot import FriendlyBot
 
 __author__ = "Alex Sohrab & Shail Patel"
+
+# pygame stores what type of click as integers in event.button
+LEFT_CLICK = 1
+RIGHT_CLICK = 3
 
 
 def start_sim():
@@ -31,10 +35,9 @@ def start_sim():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            elif event.type == pygame.MOUSEBUTTONUP:
+            elif event.type == pygame.MOUSEBUTTONUP and event.button == LEFT_CLICK:
                 # Calculate the x and y distances between the mouse and the center.
                 mouse_pos = pygame.mouse.get_pos()
-
                 # Looking at each player in the formation
                 for player in player_list:
                     dist_x = mouse_pos[0] - player.x
@@ -44,10 +47,27 @@ def start_sim():
                     if math.hypot(dist_x, dist_y) < player.radius:
                         print('collision at ' + str(player.x) + ', ' + str(player.y) + '. The click was ' +
                               str(dist_x) + ', ' + str(dist_y) + ' from the center of the player')
-                        player.x += dist_x
-                        player.y += dist_y
                         last_clicked_player = player
                         print(last_clicked_player)
+
+            # manual bot movement conditionals
+            elif event.type == pygame.KEYDOWN:
+                # move clicked bot using arrow keys
+                if last_clicked_player is not None:
+                    if event.key == pygame.K_LEFT:
+                        last_clicked_player.x -= 3
+                    elif event.key == pygame.K_RIGHT:
+                        last_clicked_player.x += 3
+                    elif event.key == pygame.K_UP:
+                        last_clicked_player.y -= 3
+                    elif event.key == pygame.K_DOWN:
+                        last_clicked_player.y += 3
+
+            elif event.type == pygame.MOUSEBUTTONUP and event.button == RIGHT_CLICK:
+                # move clicked bot using right click on mouse
+                mouse_pos = pygame.mouse.get_pos()
+
+                last_clicked_player.update_position((mouse_pos[0], mouse_pos[1]))
 
         screen.fill((0, 0, 0))
         # Formation center
