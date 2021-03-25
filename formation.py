@@ -35,6 +35,10 @@ class Formation:
         # creates class variables that will store the number of bots in each row
         self.defenders_count, self.midfielders_count, self.attackers_count, self.strikers_count = None, None, None, None
 
+    def __iter__(self):
+        """Makes formation iterable"""
+        return iter(self.player_list)
+
     def set_positions(self, defenders_count, midfielders_count, attackers_count, strikers_count):
         """Set how many bots in each line"""
         self.defenders_count = defenders_count
@@ -121,13 +125,13 @@ class Formation:
 
         return pos_list
 
-    def move_center(self, player_list=None, increment=(0, 0)):
+    def move_center(self, increment=(0, 0)):
         """Moves the center and the bots move to keep in line with it.
         """
-        if player_list is None:
-            player_list = []
+        if self.player_list is None:
+            self.player_list = []
 
-        for bot in player_list:
+        for bot in self.player_list:
             bot.update_position(tuple(x + y for x, y in zip((bot.x, bot.y), increment)))
 
         # Like taking Cartesian product of center & increment then summing each of their values

@@ -22,11 +22,11 @@ def start_sim():
     formation4_4_0_2 = Formation(11, field_width)
     formation4_4_0_2.set_positions(4, 4, 0, 2)
 
-    # TODO: make formation iterable instead of using player_list
-    player_list = formation3_4_2_1.create_formation()
+    curr_formation = formation3_4_2_1
     running = True
     # Test move_center here
-    formation3_4_2_1.move_center(player_list, (0, 0))
+    curr_formation.create_formation()
+    curr_formation.move_center((0, 0))
 
     formation_book = {0: formation3_4_2_1, 1: formation4_4_0_2}
     # stores the last clicked bot
@@ -35,8 +35,7 @@ def start_sim():
     last_clicked_player = None
 
     # Game loop
-    # TODO : Add click and move functionality
-    #        long term add robot response to the movement of others
+    # TODO: long term add robot response to the movement of others
     while running:
         # Event loop
         for event in pygame.event.get():
@@ -46,7 +45,7 @@ def start_sim():
                 # Calculate the x and y distances between the mouse and the center.
                 mouse_pos = pygame.mouse.get_pos()
                 # Looking at each player in the formation
-                for player in player_list:
+                for player in curr_formation:
                     dist_x = mouse_pos[0] - player.x
                     dist_y = mouse_pos[1] - player.y
                     # Check if click is within bounds of a bot
@@ -75,8 +74,7 @@ def start_sim():
                     # TODO: change this?
                     number = event.key - 48
                     if formation_book.get(number) is not None:
-                        player_list = formation_book[number].create_formation()
-                    print(event.key)
+                        curr_formation = formation_book[number].create_formation()
 
             elif event.type == pygame.MOUSEBUTTONUP and event.button == RIGHT_CLICK:
                 # move clicked bot using right click on mouse
@@ -89,7 +87,7 @@ def start_sim():
         pygame.draw.circle(screen, GREEN, formation3_4_2_1.center, 3, 80)
         # Halfway line
         pygame.draw.line(screen, WHITE, (0, field_depth / 2), (field_width, field_depth / 2))
-        for player in player_list:
+        for player in curr_formation:
             player.display()
         pygame.display.flip()
 
