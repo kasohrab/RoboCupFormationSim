@@ -42,21 +42,21 @@ class Formation:
         self.attackers_count = attackers_count
         self.strikers_count = strikers_count
 
-        # set the width of each row
-        self.defense_width = self.total_width / (defenders_count + 1)
-        self.midfield_width = (self.total_width / (midfielders_count + 1))
-        self.attack_width = (self.total_width / (attackers_count + 1))
-        self.strikers_width = (self.total_width / (strikers_count + 1))
-        # Set initial center as the average of all robot positions
-        average_depth = (self.goalkeeper_depth + (self.defense_depth * defenders_count) +
-                         (self.midfielders_depth * midfielders_count) + (self.attackers_depth * attackers_count)
-                         + (self.strikers_depth + strikers_count)) / len(self.player_list)
-
     def create_formation(self):
         """Creates initial formation and positions that the robots will go to
         """
 
         # TODO: relative to center and ball (adjust width and depth)
+
+        # set the width of each row
+        self.defense_width = self.total_width / (self.defenders_count + 1)
+        self.midfield_width = (self.total_width / (self.midfielders_count + 1))
+        self.attack_width = (self.total_width / (self.attackers_count + 1))
+        self.strikers_width = (self.total_width / (self.strikers_count + 1))
+        # Set initial center as the average of all robot positions
+        average_depth = (self.goalkeeper_depth + (self.defense_depth * self.defenders_count) +
+                         (self.midfielders_depth * self.midfielders_count) + (self.attackers_depth * self.attackers_count)
+                         + (self.strikers_depth + self.strikers_count)) / len(self.player_list)
 
         # add this to allow formation to be adjustable to any width
         shift_left = (field_width / 2) - self.total_width / 2
@@ -137,7 +137,6 @@ class Formation:
     def update_width(self, new_width):
         """Expand or contract the width of the formation depending on the circumstance.
         """
-        # TODO: Fix this
         self.total_width = new_width
         self.create_formation()
 
