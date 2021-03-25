@@ -125,8 +125,13 @@ class Formation:
 
         return pos_list
 
-    def move_center(self, increment=(0, 0)):
+    def move_center(self, center=(0, 0)):
         """Moves the center and the bots move to keep in line with it.
+        """
+        self.increment_center(((center[0] - self.center[0]), (center[1] - self.center[1])))
+
+    def increment_center(self, increment=(0, 0)):
+        """Increments the center based on increment and the bots move to keep in line with it.
         """
         if self.player_list is None:
             self.player_list = []

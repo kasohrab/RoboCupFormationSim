@@ -9,6 +9,8 @@ __author__ = "Alex Sohrab & Shail Patel"
 LEFT_CLICK = 1
 RIGHT_CLICK = 3
 
+# center radius variable
+CENTER_RADIUS = 4
 
 def start_sim():
     """"Method that starts the simulation"""
@@ -22,18 +24,22 @@ def start_sim():
     formation4_4_0_2 = Formation(11, field_width)
     formation4_4_0_2.set_positions(4, 4, 0, 2)
 
-    curr_formation = formation3_4_2_1
-    running = True
-    # Test move_center here
-    curr_formation.create_formation()
-    curr_formation.move_center((0, 0))
-
+    # like a playbook
     formation_book = {0: formation3_4_2_1, 1: formation4_4_0_2}
-    # stores the last clicked bot
+
+    curr_formation = formation_book[0]
+    curr_formation.create_formation()
+    running = True
+
+    # Test move_center here
+    curr_formation.increment_center((0, 0))
+    # stores the last clicked bot/center
     # we can update this when the user clicks on a bot
-    # then the user can use arrow keys to move it
+    # then the user can use arrow keys/right click to move it
     last_clicked_player = None
 
+    # stores if the user clicked on the center to move it
+    click_on_center = False
     # Game loop
     # TODO: long term add robot response to the movement of others
     while running:
@@ -44,16 +50,21 @@ def start_sim():
             elif event.type == pygame.MOUSEBUTTONUP and event.button == LEFT_CLICK:
                 # Calculate the x and y distances between the mouse and the center.
                 mouse_pos = pygame.mouse.get_pos()
+
+                # check if user clicked on center
+                dist_x = mouse_pos[0] - curr_formation.center[0]
+                dist_y = mouse_pos[1] - curr_formation.center[1]
+                if math.hypot(dist_x, dist_y) < CENTER_RADIUS:
+                    click_on_center = True
+                else:
+                    click_on_center = False
+
                 # Looking at each player in the formation
                 for player in curr_formation:
-                    dist_x = mouse_pos[0] - player.x
-                    dist_y = mouse_pos[1] - player.y
-                    # Check if click is within bounds of a bot
-                    if math.hypot(dist_x, dist_y) < player.radius:
-                        print('collision at ' + str(player.x) + ', ' + str(player.y) + '. The click was ' +
-                              str(dist_x) + ', ' + str(dist_y) + ' from the center of the player')
+                    player_check = is_within_bounds(mouse_pos, player)
+                    if player_check:
                         last_clicked_player = player
-                        print(last_clicked_player)
+                        break
 
             elif event.type == pygame.KEYDOWN:
                 # manual bot movement conditionals
@@ -71,27 +82,48 @@ def start_sim():
                 # change formations mid-match
                 # if player clicks a number, choose that numbered formation from the list
                 elif 48 <= event.key <= 57:
-                    # TODO: change this?
+                    # TODO: control whether this resets position or not
                     number = event.key - 48
                     if formation_book.get(number) is not None:
-                        curr_formation = formation_book[number].create_formation()
+                        curr_formation = formation_book[number]
+                        curr_formation.create_formation()
 
             elif event.type == pygame.MOUSEBUTTONUP and event.button == RIGHT_CLICK:
                 # move clicked bot using right click on mouse
                 mouse_pos = pygame.mouse.get_pos()
-
-                last_clicked_player.update_position((mouse_pos[0], mouse_pos[1]))
+                if click_on_center:
+                    curr_formation.move_center(mouse_pos)
+                elif last_clicked_player is not None:
+                    last_clicked_player.update_position((mouse_pos[0], mouse_pos[1]))
 
         screen.fill((0, 0, 0))
+
         # Formation center
-        pygame.draw.circle(screen, GREEN, formation3_4_2_1.center, 3, 80)
+        pygame.draw.circle(screen, GREEN, curr_formation.center, CENTER_RADIUS, 80)
+
         # Halfway line
         pygame.draw.line(screen, WHITE, (0, field_depth / 2), (field_width, field_depth / 2))
+
         for player in curr_formation:
             player.display()
         pygame.display.flip()
 
     pygame.quit()
+
+
+def is_within_bounds(mouse_pos, bot):
+    """
+    :param mouse_pos: the mouse position
+    :param bot: the bot to check
+    :return: Bool whether the bot is within bounds
+    """
+    dist_x = mouse_pos[0] - bot.x
+    dist_y = mouse_pos[1] - bot.y
+
+    if math.hypot(dist_x, dist_y) < bot.radius:
+        return True
+    else:
+        return False
 
 
 if __name__ == "__main__":
