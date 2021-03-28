@@ -19,10 +19,10 @@ def start_sim():
     pygame.init()
 
     # sample formation structures
-    formation3_4_2_1 = Formation(11, field_width)
+    formation3_4_2_1 = Formation(11, field_width, 300)
     formation3_4_2_1.set_positions(3, 4, 2, 1)
 
-    formation4_4_0_2 = Formation(11, field_width)
+    formation4_4_0_2 = Formation(11, field_width, 300)
     formation4_4_0_2.set_positions(4, 4, 0, 2)
 
     # like a playbook
@@ -95,6 +95,7 @@ def start_sim():
                 mouse_pos = pygame.mouse.get_pos()
                 if click_on_center:
                     curr_formation.move_center(mouse_pos)
+                    update_bounds(curr_formation)
                     print(curr_formation.center)
                 elif last_clicked_player is not None:
                     last_clicked_player.update_position((mouse_pos[0], mouse_pos[1]))
@@ -108,7 +109,6 @@ def start_sim():
         pygame.draw.line(screen, WHITE, (0, field_depth / 2), (field_width, field_depth / 2))
 
         for player in curr_formation:
-            update_bounds(curr_formation)
             player.display()
         pygame.display.flip()
 
@@ -133,8 +133,24 @@ def update_bounds(formation: Formation):
         if off_check := player.is_offscreen():
             direction = off_check[1]
             # random numbers for now
-            # TODO: fix not staying in right place
-            formation.update_width(157) if direction == 'x' else formation.update_depth(.6)
+            # TODO: actual numbers (works for right of field so far)
+            if direction == 'x':
+                if (dist_away := player.x) > 600:
+                    # right of the field
+                    print(formation.center)
+                    formation.update_width(field_width - formation.center[0]/2)
+                else:
+                    # left of the field
+                    formation.update_width(formation.total_width + dist_away)
+            else:
+                # TODO: should be update depth
+                if (dist_away := player.y) < 0:
+                    # north of the field
+                    formation.update_width(formation.total_width + dist_away)
+                else:
+                    # left of the field
+                    formation.update_width(formation.total_width + dist_away - field_depth)
+
 
 
 if __name__ == "__main__":
