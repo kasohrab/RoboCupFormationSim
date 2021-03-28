@@ -26,3 +26,15 @@ class FriendlyBot:
 
     def get_position(self):
         return self.x, self.y
+
+    def is_offscreen(self):
+        """
+        :param self: the bot to check
+        :return: Bool whether the bot is outside the field"""
+
+        if field_width < self.x or self.x < 0:
+            return True, 'x'
+        elif field_depth < self.y or self.y < 0:
+            return True, 'y'
+        else:
+            return False

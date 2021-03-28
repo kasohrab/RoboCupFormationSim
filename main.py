@@ -12,6 +12,7 @@ RIGHT_CLICK = 3
 # center radius variable
 CENTER_RADIUS = 4
 
+
 def start_sim():
     """"Method that starts the simulation"""
 
@@ -33,6 +34,7 @@ def start_sim():
 
     # Test move_center here
     curr_formation.increment_center((0, 0))
+
     # stores the last clicked bot/center
     # we can update this when the user clicks on a bot
     # then the user can use arrow keys/right click to move it
@@ -86,7 +88,7 @@ def start_sim():
                     number = event.key - 48
                     if formation_book.get(number) is not None:
                         curr_formation = formation_book[number]
-                        curr_formation.create_formation()
+                        curr_formation.create_formation
 
             elif event.type == pygame.MOUSEBUTTONUP and event.button == RIGHT_CLICK:
                 # move clicked bot using right click on mouse
@@ -105,6 +107,7 @@ def start_sim():
         pygame.draw.line(screen, WHITE, (0, field_depth / 2), (field_width, field_depth / 2))
 
         for player in curr_formation:
+            update_bounds(curr_formation)
             player.display()
         pygame.display.flip()
 
@@ -120,10 +123,17 @@ def is_within_bounds(mouse_pos, bot):
     dist_x = mouse_pos[0] - bot.x
     dist_y = mouse_pos[1] - bot.y
 
-    if math.hypot(dist_x, dist_y) < bot.radius:
-        return True
-    else:
-        return False
+    return math.hypot(dist_x, dist_y) < bot.radius
+
+
+def update_bounds(formation: Formation):
+    # TODO: FINISH THIS AND FIX (new update_formation method based on center)
+    for player in formation:
+        if off_check := player.is_offscreen():
+            direction = off_check[1]
+            # random numbers for now
+            # TODO: fix not staying in right place
+            formation.update_width(150) if direction == 'x' else formation.update_depth(.5)
 
 
 if __name__ == "__main__":

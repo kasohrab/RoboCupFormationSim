@@ -18,7 +18,7 @@ class Formation:
             player_count += 1
 
         # variables that help define the center of the formation
-        self.center = None
+        self.center = (0, 0)
         self.goalkeeper_depth = field_depth - 20
         self.defense_depth = 840
         self.midfielders_depth = 750
@@ -68,7 +68,7 @@ class Formation:
         # Set player initial positions where (0,0) is top left
 
         # Sweeper Keeper
-        self.player_list[0].update_position((field_width / 2, field_depth - 20))
+        self.player_list[0].update_position((field_width / 2, self.goalkeeper_depth))
 
         count = 1
         index = 1
@@ -76,7 +76,7 @@ class Formation:
         # Defenders
         while count <= self.defenders_count:
             self.player_list[index].\
-                update_position((count * self.defense_width + shift_left, 840))
+                update_position((count * self.defense_width + shift_left, self.defense_depth))
             count += 1
             index += 1
 
@@ -84,7 +84,7 @@ class Formation:
         count = 1
         while count <= self.midfielders_count:
             self.player_list[index].\
-                update_position((count * self.midfield_width + shift_left, 750))
+                update_position((count * self.midfield_width + shift_left, self.midfielders_depth))
             count += 1
             index += 1
 
@@ -92,7 +92,7 @@ class Formation:
         count = 1
         while count <= self.attackers_count:
             self.player_list[index].\
-                update_position((count * self.attack_width + shift_left,  660))
+                update_position((count * self.attack_width + shift_left,  self.attackers_depth))
             count += 1
             index += 1
 
@@ -100,15 +100,13 @@ class Formation:
         count = 1
         while count <= self.strikers_count:
             self.player_list[index].\
-                update_position((count * self.strikers_width + shift_left, 600))
+                update_position((count * self.strikers_width + shift_left, self.strikers_depth))
             count += 1
             index += 1
 
         # set center to average of positions
         # maybe there is a better place for this?
         self.center = [sum(y) / len(y) for y in zip(*self.get_positions())]
-
-        return self.player_list
 
     def get_formation(self):
         """formation getter method
@@ -152,8 +150,10 @@ class Formation:
     def update_depth(self, factor):
         """Push the formation lines up or back the pitch.
         """
+        self.goalkeeper_depth *= factor
         self.defense_depth *= factor
         self.midfielders_depth *= factor
         self.attackers_depth *= factor
         self.strikers_depth *= factor
+        self.create_formation()
 
