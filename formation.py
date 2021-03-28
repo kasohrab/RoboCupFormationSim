@@ -25,6 +25,7 @@ class Formation:
         self.attackers_depth = 660
         self.strikers_depth = 600
 
+        self.goalkeeper_width = 0
         self.defense_width = 0
         self.midfield_width = 0
         self.attack_width = 0
@@ -53,13 +54,15 @@ class Formation:
         # TODO: relative to center and ball (adjust width and depth)
 
         # set the width of each row
+        self.goalkeeper_width = self.total_width / 2
         self.defense_width = self.total_width / (self.defenders_count + 1)
         self.midfield_width = (self.total_width / (self.midfielders_count + 1))
         self.attack_width = (self.total_width / (self.attackers_count + 1))
         self.strikers_width = (self.total_width / (self.strikers_count + 1))
         # Set initial center as the average of all robot positions
         average_depth = (self.goalkeeper_depth + (self.defense_depth * self.defenders_count) +
-                         (self.midfielders_depth * self.midfielders_count) + (self.attackers_depth * self.attackers_count)
+                         (self.midfielders_depth * self.midfielders_count)
+                         + (self.attackers_depth * self.attackers_count)
                          + (self.strikers_depth + self.strikers_count)) / len(self.player_list)
 
         # add this to allow formation to be adjustable to any width
@@ -68,7 +71,7 @@ class Formation:
         # Set player initial positions where (0,0) is top left
 
         # Sweeper Keeper
-        self.player_list[0].update_position((field_width / 2, self.goalkeeper_depth))
+        self.player_list[0].update_position((1 * self.goalkeeper_width + shift_left, self.goalkeeper_depth + (self.goalkeeper_depth / field_depth) * self.center[1]))
 
         count = 1
         index = 1
@@ -76,7 +79,7 @@ class Formation:
         # Defenders
         while count <= self.defenders_count:
             self.player_list[index].\
-                update_position((count * self.defense_width + shift_left, self.defense_depth))
+                update_position((count * self.defense_width + shift_left, self.defense_depth + (self.defense_depth / field_depth) * self.center[1]))
             count += 1
             index += 1
 
@@ -84,7 +87,7 @@ class Formation:
         count = 1
         while count <= self.midfielders_count:
             self.player_list[index].\
-                update_position((count * self.midfield_width + shift_left, self.midfielders_depth))
+                update_position((count * self.midfield_width + shift_left, self.midfielders_depth + (self.midfielders_depth / field_depth) * self.center[1]))
             count += 1
             index += 1
 
@@ -92,7 +95,7 @@ class Formation:
         count = 1
         while count <= self.attackers_count:
             self.player_list[index].\
-                update_position((count * self.attack_width + shift_left,  self.attackers_depth))
+                update_position((count * self.attack_width + shift_left,  self.attackers_depth + (self.attackers_depth / field_depth) * self.center[1]))
             count += 1
             index += 1
 
@@ -100,7 +103,7 @@ class Formation:
         count = 1
         while count <= self.strikers_count:
             self.player_list[index].\
-                update_position((count * self.strikers_width + shift_left, self.strikers_depth))
+                update_position((count * self.strikers_width + shift_left, self.strikers_depth + (self.strikers_depth / field_depth) * self.center[1]))
             count += 1
             index += 1
 
@@ -141,11 +144,27 @@ class Formation:
         # Then the xth sum is stored as xth index in the tuple
         self.center = tuple(x + y for x, y in zip(self.center, increment))
 
+    def factor_center(self, factor, direction):
+        """Factor times the center based on factor and the bots move to keep in line with it.
+        """
+        if self.player_list is None:
+            self.player_list = []
+        print(self.center[0])
+        if direction == 'x':
+            for bot in self.player_list:
+                bot.update_position((bot.x * factor, bot.y))
+        else:
+            for bot in self.player_list:
+                bot.update_position((bot.x, bot.y * factor))
+
+        self.center = [sum(y) / len(y) for y in zip(*self.get_positions())]
+
     def update_width(self, new_width):
         """Expand or contract the width of the formation depending on the circumstance.
         """
         self.total_width = new_width
-        self.create_formation()
+        self.factor_center(self.total_width / field_width, 'x')
+        print(self.center)
 
     def update_depth(self, factor):
         """Push the formation lines up or back the pitch.

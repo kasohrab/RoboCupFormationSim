@@ -88,13 +88,14 @@ def start_sim():
                     number = event.key - 48
                     if formation_book.get(number) is not None:
                         curr_formation = formation_book[number]
-                        curr_formation.create_formation
+                        curr_formation.create_formation()
 
             elif event.type == pygame.MOUSEBUTTONUP and event.button == RIGHT_CLICK:
                 # move clicked bot using right click on mouse
                 mouse_pos = pygame.mouse.get_pos()
                 if click_on_center:
                     curr_formation.move_center(mouse_pos)
+                    print(curr_formation.center)
                 elif last_clicked_player is not None:
                     last_clicked_player.update_position((mouse_pos[0], mouse_pos[1]))
 
@@ -127,13 +128,13 @@ def is_within_bounds(mouse_pos, bot):
 
 
 def update_bounds(formation: Formation):
-    # TODO: FINISH THIS AND FIX (new update_formation method based on center)
+    # TODO: FINISH THIS
     for player in formation:
         if off_check := player.is_offscreen():
             direction = off_check[1]
             # random numbers for now
             # TODO: fix not staying in right place
-            formation.update_width(150) if direction == 'x' else formation.update_depth(.5)
+            formation.update_width(157) if direction == 'x' else formation.update_depth(.6)
 
 
 if __name__ == "__main__":
