@@ -5,6 +5,7 @@ from references import *
 
 __author__ = "Alex Sohrab & Shail Patel"
 
+"""Main references"""
 # pygame stores what type of click as integers in event.button
 LEFT_CLICK = 1
 RIGHT_CLICK = 3
@@ -14,7 +15,9 @@ CENTER_RADIUS = 4
 
 
 def start_sim():
-    """"Method that starts the simulation"""
+    """
+    Method that starts the simulation
+    """
 
     pygame.init()
 
@@ -128,6 +131,11 @@ def is_within_bounds(mouse_pos, bot):
 
 
 def update_bounds(formation: Formation):
+    """
+    Checks each bot to see if it is out of bounds. If it is then resize the formation.
+
+    :param formation: the current formation in use
+    """
     # TODO: FINISH THIS
     for player in formation:
         if off_check := player.is_offscreen():
@@ -150,7 +158,6 @@ def update_bounds(formation: Formation):
                 else:
                     # left of the field
                     formation.update_width(formation.total_width + dist_away - field_depth)
-
 
 
 if __name__ == "__main__":

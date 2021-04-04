@@ -169,7 +169,7 @@ class Formation:
         """Expand or contract the width of the formation depending on the circumstance.
         """
         self.total_width = new_width
-        #self.factor_center(self.total_width / field_width, 'x')
+        # self.factor_center(self.total_width / field_width, 'x')
         self.create_formation()
         print(self.center)
 
