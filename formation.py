@@ -5,7 +5,8 @@ from bot import FriendlyBot
 class Formation:
     """Formation class"""
 
-    def __init__(self, num_bots, total_width, total_depth):
+    def __init__(self, num_bots, total_width, total_depth, defenders_count,
+                 midfielders_count, attackers_count, strikers_count):
         """Initializing the formation data"""
 
         if num_bots != 11 | num_bots != 6:
@@ -37,25 +38,19 @@ class Formation:
 
         self.total_width = total_width
 
-        # creates class variables that will store the number of bots in each row
-        self.defenders_count, self.midfielders_count, self.attackers_count, self.strikers_count = None, None, None, None
-
-    def __iter__(self):
-        """Makes formation iterable"""
-        return iter(self.player_list)
-
-    def set_positions(self, defenders_count, midfielders_count, attackers_count, strikers_count):
         """Set how many bots in each line"""
         self.defenders_count = defenders_count
         self.midfielders_count = midfielders_count
         self.attackers_count = attackers_count
         self.strikers_count = strikers_count
 
-    def create_formation(self):
-        """Creates initial formation and positions that the robots will go to
-        """
+    def __iter__(self):
+        """Makes formation iterable"""
+        return iter(self.player_list)
 
-        # TODO: relative to center and ball (adjust width and depth)
+    def build(self):
+        """Builds formation and positions that the robots will go to
+        """
 
         # set the width of each row
         self.goalkeeper_width = self.total_width / 2
@@ -115,7 +110,6 @@ class Formation:
         # set center to average of positions
         # maybe there is a better place for this?
         self.center = [sum(y) / len(y) for y in zip(*self.get_positions())]
-        print("After After" + self.center.__str__())
 
     def get_formation(self):
         """formation getter method
@@ -170,8 +164,7 @@ class Formation:
         """
         self.total_width = new_width
         # self.factor_center(self.total_width / field_width, 'x')
-        self.create_formation()
-        print(self.center)
+        self.build()
 
     def update_depth(self, factor):
         """Push the formation lines up or back the pitch.
@@ -181,7 +174,7 @@ class Formation:
         self.midfielders_depth *= factor
         self.attackers_depth *= factor
         self.strikers_depth *= factor
-        self.create_formation()
+        self.build()
 
     def update_depth_vars(self):
         """Update the depth vars.

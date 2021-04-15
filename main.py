@@ -22,17 +22,14 @@ def start_sim():
     pygame.init()
 
     # sample formation structures
-    formation3_4_2_1 = Formation(11, field_width, 300)
-    formation3_4_2_1.set_positions(3, 4, 2, 1)
-
-    formation4_4_0_2 = Formation(11, field_width, 300)
-    formation4_4_0_2.set_positions(4, 4, 0, 2)
+    formation3_4_2_1 = Formation(11, field_width, 300, 3, 4, 2, 1)
+    formation4_4_0_2 = Formation(11, field_width, 300, 4, 4, 0, 2)
 
     # like a playbook
     formation_book = {0: formation3_4_2_1, 1: formation4_4_0_2}
 
     curr_formation = formation_book[0]
-    curr_formation.create_formation()
+    curr_formation.build()
     running = True
 
     # Test move_center here
@@ -91,7 +88,7 @@ def start_sim():
                     number = event.key - 48
                     if formation_book.get(number) is not None:
                         curr_formation = formation_book[number]
-                        curr_formation.create_formation()
+                        curr_formation.build()
 
             elif event.type == pygame.MOUSEBUTTONUP and event.button == RIGHT_CLICK:
                 # move clicked bot using right click on mouse
@@ -141,11 +138,10 @@ def update_bounds(formation: Formation):
         if off_check := player.is_offscreen():
             direction = off_check[1]
             # random numbers for now
-            # TODO: actual numbers (works for right of field so far)
+            # TODO: actual numbers (works for right of field so far) ? how to find actual number
             if direction == 'x':
                 if (dist_away := player.x) > 600:
                     # right of the field
-                    print(formation.center)
                     formation.update_width(field_width - formation.center[0]/2)
                 else:
                     # left of the field
@@ -156,7 +152,7 @@ def update_bounds(formation: Formation):
                     # north of the field
                     formation.update_width(formation.total_width + dist_away)
                 else:
-                    # left of the field
+                    # south of the field
                     formation.update_width(formation.total_width + dist_away - field_depth)
 
 
