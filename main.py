@@ -96,7 +96,6 @@ def start_sim():
                 if click_on_center:
                     curr_formation.move_center(mouse_pos)
                     update_bounds(curr_formation)
-                    print(curr_formation.center)
                 elif last_clicked_player is not None:
                     last_clicked_player.update_position((mouse_pos[0], mouse_pos[1]))
 
@@ -133,26 +132,27 @@ def update_bounds(formation: Formation):
 
     :param formation: the current formation in use
     """
-    # TODO: FINISH THIS
     for player in formation:
         if off_check := player.is_offscreen():
             direction = off_check[1]
-            # random numbers for now
-            # TODO: is this right?
+
             if direction == 'x':
-                if (dist_away := player.x) > 600:
+                if player.x > 600:
                     # right of the field
-                    formation.update_width(dist_away - formation.center[0])
+                    formation.update_width(2 * (field_width - formation.center[0]))
                 else:
                     # left of the field
-                    formation.update_width(formation.center[0] + dist_away)
+                    formation.update_width(2 * formation.center[0])
             else:
-                if (dist_away := player.y) < 0:
+                # this comes from 4 rows and the bot having a radius of 9
+                # allows to update_depth to get the correct row_separation
+                row_constant: int = 36
+                if player.y < 0:
                     # north of the field
-                    formation.update_depth(formation.center[1] + dist_away)
+                    formation.update_depth(2 * (formation.center[1]) - row_constant)
                 else:
                     # south of the field
-                    formation.update_depth(dist_away - formation.center[1])
+                    formation.update_depth(2 * (field_depth - formation.center[1]) - row_constant)
 
 
 if __name__ == "__main__":
