@@ -138,22 +138,21 @@ def update_bounds(formation: Formation):
         if off_check := player.is_offscreen():
             direction = off_check[1]
             # random numbers for now
-            # TODO: actual numbers (works for right of field so far) ? how to find actual number
+            # TODO: is this right?
             if direction == 'x':
                 if (dist_away := player.x) > 600:
                     # right of the field
-                    formation.update_width(field_width - formation.center[0]/2)
+                    formation.update_width(dist_away - formation.center[0])
                 else:
                     # left of the field
-                    formation.update_width(formation.total_width + dist_away)
+                    formation.update_width(formation.center[0] + dist_away)
             else:
-                # TODO: should be update depth
                 if (dist_away := player.y) < 0:
                     # north of the field
-                    formation.update_width(formation.total_width + dist_away)
+                    formation.update_depth(formation.center[1] + dist_away)
                 else:
                     # south of the field
-                    formation.update_width(formation.total_width + dist_away - field_depth)
+                    formation.update_depth(dist_away - formation.center[1])
 
 
 if __name__ == "__main__":

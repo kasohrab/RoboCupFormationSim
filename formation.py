@@ -51,7 +51,14 @@ class Formation:
     def build(self):
         """Builds formation and positions that the robots will go to
         """
+        # TODO: Make center relative (use center instead of field_... always)
 
+        # set the depth
+        self.goalkeeper_depth = field_depth - 20
+        self.defense_depth = self.goalkeeper_depth - self.row_separation
+        self.midfielders_depth = self.defense_depth - self.row_separation
+        self.attackers_depth = self.midfielders_depth - self.row_separation
+        self.strikers_depth = self.attackers_depth - self.row_separation
         # set the width of each row
         self.goalkeeper_width = self.total_width / 2
         self.defense_width = self.total_width / (self.defenders_count + 1)
@@ -166,21 +173,17 @@ class Formation:
         # self.factor_center(self.total_width / field_width, 'x')
         self.build()
 
-    def update_depth(self, factor):
+    def update_depth(self, new_depth):
         """Push the formation lines up or back the pitch.
         """
-        self.goalkeeper_depth *= factor
-        self.defense_depth *= factor
-        self.midfielders_depth *= factor
-        self.attackers_depth *= factor
-        self.strikers_depth *= factor
+        self.row_separation = new_depth / 4
         self.build()
 
     def update_depth_vars(self):
         """Update the depth vars.
         Eventually should be able to do all rows or individual rows.
         """
-        # TODO: do
+        # TODO: do or dont...
         self.goalkeeper_depth = field_depth - 20
         self.defense_depth = self.goalkeeper_depth - self.row_separation
         self.midfielders_depth = self.defense_depth - self.row_separation
