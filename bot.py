@@ -32,9 +32,9 @@ class FriendlyBot:
         :param self: the bot to check
         :return: Bool whether the bot is outside the field"""
 
-        if field_width < self.x + self.radius or self.x - self.radius < 0:
+        if FIELD_WIDTH < self.x + self.radius or self.x - self.radius < 0:
             return True, 'x'
-        elif field_depth < self.y + self.radius or self.y - self.radius < 0:
+        elif FIELD_DEPTH < self.y + self.radius or self.y - self.radius < 0:
             return True, 'y'
         else:
             return False

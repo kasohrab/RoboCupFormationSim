@@ -22,8 +22,8 @@ def start_sim():
     pygame.init()
 
     # sample formation structures
-    formation3_4_2_1 = Formation(11, field_width, 300, 3, 4, 2, 1)
-    formation4_4_0_2 = Formation(11, field_width, 300, 4, 4, 0, 2)
+    formation3_4_2_1 = Formation(11, FIELD_WIDTH, 300, 3, 4, 2, 1)
+    formation4_4_0_2 = Formation(11, FIELD_WIDTH, 300, 4, 4, 0, 2)
 
     # like a playbook
     formation_book = {0: formation3_4_2_1, 1: formation4_4_0_2}
@@ -105,7 +105,7 @@ def start_sim():
         pygame.draw.circle(screen, GREEN, curr_formation.center, CENTER_RADIUS, 80)
 
         # Halfway line
-        pygame.draw.line(screen, WHITE, (0, field_depth / 2), (field_width, field_depth / 2))
+        pygame.draw.line(screen, WHITE, (0, FIELD_DEPTH / 2), (FIELD_WIDTH, FIELD_DEPTH / 2))
 
         for player in curr_formation:
             player.display()
@@ -139,7 +139,7 @@ def update_bounds(formation: Formation):
             if direction == 'x':
                 if player.x > 600:
                     # right of the field
-                    formation.update_width(2 * (field_width - formation.center[0]))
+                    formation.update_width(2 * (FIELD_WIDTH - formation.center[0]))
                 else:
                     # left of the field
                     formation.update_width(2 * formation.center[0])
@@ -152,7 +152,7 @@ def update_bounds(formation: Formation):
                     formation.update_depth(2 * (formation.center[1]) - row_constant)
                 else:
                     # south of the field
-                    formation.update_depth(2 * (field_depth - formation.center[1]) - row_constant)
+                    formation.update_depth(2 * (FIELD_DEPTH - formation.center[1]) - row_constant)
 
 
 if __name__ == "__main__":

@@ -24,7 +24,7 @@ class Formation:
         self.row_separation = total_depth / 4
 
         self.center = (0, 0)
-        self.goalkeeper_depth = field_depth - 20
+        self.goalkeeper_depth = FIELD_DEPTH - 20
         self.defense_depth = self.goalkeeper_depth - self.row_separation
         self.midfielders_depth = self.defense_depth - self.row_separation
         self.attackers_depth = self.midfielders_depth - self.row_separation
@@ -54,7 +54,7 @@ class Formation:
         # TODO: Make center relative (use center instead of field_... always)
 
         # set the depth
-        self.goalkeeper_depth = field_depth - 20
+        self.goalkeeper_depth = FIELD_DEPTH - 20
         self.defense_depth = self.goalkeeper_depth - self.row_separation
         self.midfielders_depth = self.defense_depth - self.row_separation
         self.attackers_depth = self.midfielders_depth - self.row_separation
@@ -72,7 +72,7 @@ class Formation:
                          + (self.strikers_depth + self.strikers_count)) / len(self.player_list)
 
         # add this to allow formation to be adjustable to any width
-        shift_left = (field_width / 2) - (self.total_width / 2)
+        shift_left = (FIELD_WIDTH / 2) - (self.total_width / 2)
 
         # Set player initial positions where (0,0) is top left
 
@@ -184,7 +184,7 @@ class Formation:
         Eventually should be able to do all rows or individual rows.
         """
         # TODO: do or dont...
-        self.goalkeeper_depth = field_depth - 20
+        self.goalkeeper_depth = FIELD_DEPTH - 20
         self.defense_depth = self.goalkeeper_depth - self.row_separation
         self.midfielders_depth = self.defense_depth - self.row_separation
         self.attackers_depth = self.midfielders_depth - self.row_separation
