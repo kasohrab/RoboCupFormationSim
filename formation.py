@@ -26,19 +26,21 @@ class Formation:
 
         # initial center 300 = x, 700 = y
         self.center = (300, 700)
-        self.goalkeeper_depth = FIELD_DEPTH - 20
-        self.defense_depth = self.goalkeeper_depth - self.row_separation
-        self.midfielders_depth = self.center[0] - self.row_separation
-        self.attackers_depth = self.midfielders_depth - self.row_separation
-        self.strikers_depth = self.attackers_depth - self.row_separation
+        # set the depth
+        self.goalkeeper_depth = self.center[1] + 2 * self.row_separation
+        self.defense_depth = self.center[1] + self.row_separation
+        self.midfielders_depth = self.center[1]
+        self.attackers_depth = self.center[1] - self.row_separation
+        self.strikers_depth = self.center[1] - 2 * self.row_separation
 
-        self.goalkeeper_width = 0
-        self.defense_width = 0
-        self.midfield_width = 0
-        self.attack_width = 0
-        self.strikers_width = 0
-
+        # set the width of each row
         self.total_width = total_width
+
+        self.goalkeeper_width = self.total_width / 2
+        self.defense_width = self.total_width / (self.defenders_count + 1)
+        self.midfield_width = (self.total_width / (self.midfielders_count + 1))
+        self.attack_width = (self.total_width / (self.attackers_count + 1))
+        self.strikers_width = (self.total_width / (self.strikers_count + 1))
 
         """Set how many bots in each line"""
         self.defenders_count = defenders_count
