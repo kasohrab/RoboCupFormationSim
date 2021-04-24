@@ -3,8 +3,6 @@ import math
 from formation import Formation
 from references import *
 
-__author__ = "Alex Sohrab & Shail Patel"
-
 """Main references"""
 # pygame stores what type of click as integers in event.button
 LEFT_CLICK = 1

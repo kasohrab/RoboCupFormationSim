@@ -1,4 +1,5 @@
 import pygame
+# import numpy as np
 
 # Robocup SSL is played on a 9 m long by 6 m wide field
 FIELD_DEPTH = 900

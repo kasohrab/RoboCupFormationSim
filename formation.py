@@ -12,6 +12,7 @@ class Formation:
         if num_bots != 11 | num_bots != 6:
             raise ValueError("Only 6 and 11 player formations are supported.")
 
+        # TODO: get rid of this
         self.player_list = []
         player_count = 0
         while player_count < num_bots:
@@ -23,10 +24,11 @@ class Formation:
         # how spaced apart each row of players is
         self.row_separation = total_depth / 4
 
-        self.center = (0, 0)
+        # initial center 300 = x, 700 = y
+        self.center = (300, 700)
         self.goalkeeper_depth = FIELD_DEPTH - 20
         self.defense_depth = self.goalkeeper_depth - self.row_separation
-        self.midfielders_depth = self.defense_depth - self.row_separation
+        self.midfielders_depth = self.center[0] - self.row_separation
         self.attackers_depth = self.midfielders_depth - self.row_separation
         self.strikers_depth = self.attackers_depth - self.row_separation
 
@@ -49,16 +51,16 @@ class Formation:
         return iter(self.player_list)
 
     def build(self):
+        # TODO: rename to get_positions
         """Builds formation and positions that the robots will go to
         """
-        # TODO: Make center relative (use center instead of field_... always)
 
         # set the depth
-        self.goalkeeper_depth = FIELD_DEPTH - 20
-        self.defense_depth = self.goalkeeper_depth - self.row_separation
-        self.midfielders_depth = self.defense_depth - self.row_separation
-        self.attackers_depth = self.midfielders_depth - self.row_separation
-        self.strikers_depth = self.attackers_depth - self.row_separation
+        self.goalkeeper_depth = self.center[1] + 2 * self.row_separation
+        self.defense_depth = self.center[1] + self.row_separation
+        self.midfielders_depth = self.center[1]
+        self.attackers_depth = self.center[1] - self.row_separation
+        self.strikers_depth = self.center[1] - 2 * self.row_separation
         # set the width of each row
         self.goalkeeper_width = self.total_width / 2
         self.defense_width = self.total_width / (self.defenders_count + 1)
@@ -106,7 +108,6 @@ class Formation:
             index += 1
 
         # Strikers
-        #  + self.center[0]/(field_width/self.total_width)
         count = 1
         while count <= self.strikers_count:
             self.player_list[index].\
@@ -114,9 +115,16 @@ class Formation:
             count += 1
             index += 1
 
+        if self.center[0] < 299 or self.center[0] > 301:
+            # if center is not at the center of the width
+            # adjust here
+            for bot in self.player_list:
+                bot.update_position((bot.x + self.center[0] - FIELD_WIDTH/2, bot.y))
+
         # set center to average of positions
         # maybe there is a better place for this?
-        self.center = [sum(y) / len(y) for y in zip(*self.get_positions())]
+        # Probably not needed
+        # self.center = [sum(y) / len(y) for y in zip(*self.get_positions())]
 
     def get_formation(self):
         """formation getter method

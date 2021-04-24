@@ -5,7 +5,9 @@ class FriendlyBot:
     """"Class that creates bot units to populate the screen"""
 
     def __init__(self, position=(0, 0)):
-        """Initializing the bot position and color"""
+        """Initializing the bot position and color.
+        :param position: the requested formation position of the bot.
+        Currently stored as tuple, but will be a nparray in codebase"""
         self.x, self.y = position
         # Max radius of SSL robot is 9 cm
         self.radius = 9
