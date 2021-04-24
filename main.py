@@ -3,8 +3,6 @@ import math
 from formation import Formation
 from references import *
 
-__author__ = "Alex Sohrab & Shail Patel"
-
 """Main references"""
 # pygame stores what type of click as integers in event.button
 LEFT_CLICK = 1
@@ -22,17 +20,14 @@ def start_sim():
     pygame.init()
 
     # sample formation structures
-    formation3_4_2_1 = Formation(11, field_width, 300)
-    formation3_4_2_1.set_positions(3, 4, 2, 1)
-
-    formation4_4_0_2 = Formation(11, field_width, 300)
-    formation4_4_0_2.set_positions(4, 4, 0, 2)
+    formation3_4_2_1 = Formation(11, FIELD_WIDTH, 300, 3, 4, 2, 1)
+    formation4_4_0_2 = Formation(11, FIELD_WIDTH, 300, 4, 4, 0, 2)
 
     # like a playbook
     formation_book = {0: formation3_4_2_1, 1: formation4_4_0_2}
 
     curr_formation = formation_book[0]
-    curr_formation.create_formation()
+    curr_formation.build()
     running = True
 
     # Test move_center here
@@ -91,7 +86,7 @@ def start_sim():
                     number = event.key - 48
                     if formation_book.get(number) is not None:
                         curr_formation = formation_book[number]
-                        curr_formation.create_formation()
+                        curr_formation.build()
 
             elif event.type == pygame.MOUSEBUTTONUP and event.button == RIGHT_CLICK:
                 # move clicked bot using right click on mouse
@@ -99,7 +94,6 @@ def start_sim():
                 if click_on_center:
                     curr_formation.move_center(mouse_pos)
                     update_bounds(curr_formation)
-                    print(curr_formation.center)
                 elif last_clicked_player is not None:
                     last_clicked_player.update_position((mouse_pos[0], mouse_pos[1]))
 
@@ -109,7 +103,7 @@ def start_sim():
         pygame.draw.circle(screen, GREEN, curr_formation.center, CENTER_RADIUS, 80)
 
         # Halfway line
-        pygame.draw.line(screen, WHITE, (0, field_depth / 2), (field_width, field_depth / 2))
+        pygame.draw.line(screen, WHITE, (0, FIELD_DEPTH / 2), (FIELD_WIDTH, FIELD_DEPTH / 2))
 
         for player in curr_formation:
             player.display()
@@ -136,28 +130,27 @@ def update_bounds(formation: Formation):
 
     :param formation: the current formation in use
     """
-    # TODO: FINISH THIS
     for player in formation:
         if off_check := player.is_offscreen():
             direction = off_check[1]
-            # random numbers for now
-            # TODO: actual numbers (works for right of field so far)
+
             if direction == 'x':
-                if (dist_away := player.x) > 600:
+                if player.x > 600:
                     # right of the field
-                    print(formation.center)
-                    formation.update_width(field_width - formation.center[0]/2)
+                    formation.update_width(2 * (FIELD_WIDTH - formation.center[0]))
                 else:
                     # left of the field
-                    formation.update_width(formation.total_width + dist_away)
+                    formation.update_width(2 * formation.center[0])
             else:
-                # TODO: should be update depth
-                if (dist_away := player.y) < 0:
+                # this comes from 4 rows and the bot having a radius of 9
+                # allows to update_depth to get the correct row_separation
+                row_constant: int = 36
+                if player.y < 0:
                     # north of the field
-                    formation.update_width(formation.total_width + dist_away)
+                    formation.update_depth(2 * (formation.center[1]) - row_constant)
                 else:
-                    # left of the field
-                    formation.update_width(formation.total_width + dist_away - field_depth)
+                    # south of the field
+                    formation.update_depth(2 * (FIELD_DEPTH - formation.center[1]) - row_constant)
 
 
 if __name__ == "__main__":

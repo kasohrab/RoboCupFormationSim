@@ -5,7 +5,9 @@ class FriendlyBot:
     """"Class that creates bot units to populate the screen"""
 
     def __init__(self, position=(0, 0)):
-        """Initializing the bot position and color"""
+        """Initializing the bot position and color.
+        :param position: the requested formation position of the bot.
+        Currently stored as tuple, but will be a nparray in codebase"""
         self.x, self.y = position
         # Max radius of SSL robot is 9 cm
         self.radius = 9
@@ -32,9 +34,9 @@ class FriendlyBot:
         :param self: the bot to check
         :return: Bool whether the bot is outside the field"""
 
-        if field_width < self.x or self.x < 0:
+        if FIELD_WIDTH < self.x + self.radius or self.x - self.radius < 0:
             return True, 'x'
-        elif field_depth < self.y or self.y < 0:
+        elif FIELD_DEPTH < self.y + self.radius or self.y - self.radius < 0:
             return True, 'y'
         else:
             return False
