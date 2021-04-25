@@ -36,17 +36,17 @@ class Formation:
         # set the width of each row
         self.total_width = total_width
 
-        self.goalkeeper_width = self.total_width / 2
-        self.defense_width = self.total_width / (self.defenders_count + 1)
-        self.midfield_width = (self.total_width / (self.midfielders_count + 1))
-        self.attack_width = (self.total_width / (self.attackers_count + 1))
-        self.strikers_width = (self.total_width / (self.strikers_count + 1))
-
         """Set how many bots in each line"""
         self.defenders_count = defenders_count
         self.midfielders_count = midfielders_count
         self.attackers_count = attackers_count
         self.strikers_count = strikers_count
+
+        self.goalkeeper_width = self.total_width / 2
+        self.defense_width = self.total_width / (self.defenders_count + 1)
+        self.midfield_width = (self.total_width / (self.midfielders_count + 1))
+        self.attack_width = (self.total_width / (self.attackers_count + 1))
+        self.strikers_width = (self.total_width / (self.strikers_count + 1))
 
     def __iter__(self):
         """Makes formation iterable"""
