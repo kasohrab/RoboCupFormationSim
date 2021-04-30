@@ -12,7 +12,10 @@ class Formation:
         if num_bots != 11 | num_bots != 6:
             raise ValueError("Only 6 and 11 player formations are supported.")
 
-        # TODO: get rid of this
+        # constant for formation scaling
+        self.MAX_WIDTH = total_width
+
+        # player list
         self.player_list = []
         player_count = 0
         while player_count < num_bots:

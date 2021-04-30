@@ -22,9 +22,10 @@ def start_sim():
     # sample formation structures
     formation3_4_2_1 = Formation(11, FIELD_WIDTH, 300, 3, 4, 2, 1)
     formation4_4_0_2 = Formation(11, FIELD_WIDTH, 300, 4, 4, 0, 2)
+    formation5_3_1_1 = Formation(11, FIELD_WIDTH, 300, 5, 3, 1, 1)
 
     # like a playbook
-    formation_book = {0: formation3_4_2_1, 1: formation4_4_0_2}
+    formation_book = {0: formation3_4_2_1, 1: formation4_4_0_2, 2: formation5_3_1_1}
 
     curr_formation = formation_book[0]
     curr_formation.build()
@@ -82,9 +83,12 @@ def start_sim():
                 # change formations mid-match
                 # if player clicks a number, choose that numbered formation from the list
                 elif 48 <= event.key <= 57:
-                    # TODO: control whether this resets position or not
                     number = event.key - 48
                     if formation_book.get(number) is not None:
+                        # align the formations
+                        formation_book[number].move_center(curr_formation.center)
+                        formation_book[number].update_width(curr_formation.total_width)
+                        # change curr_formation
                         curr_formation = formation_book[number]
                         curr_formation.build()
 
@@ -99,14 +103,15 @@ def start_sim():
 
         screen.fill((0, 0, 0))
 
-        # Formation center
-        pygame.draw.circle(screen, GREEN, curr_formation.center, CENTER_RADIUS, 80)
-
         # Halfway line
         pygame.draw.line(screen, WHITE, (0, FIELD_DEPTH / 2), (FIELD_WIDTH, FIELD_DEPTH / 2))
 
         for player in curr_formation:
             player.display()
+
+        # Formation center
+        pygame.draw.circle(screen, GREEN, curr_formation.center, CENTER_RADIUS, 80)
+
         pygame.display.flip()
 
     pygame.quit()
@@ -130,6 +135,7 @@ def update_bounds(formation: Formation):
 
     :param formation: the current formation in use
     """
+    # if formation.total_width < formation.MAX_WIDTH and formation.center[0] + formation.total_width/2
     for player in formation:
         if off_check := player.is_offscreen():
             direction = off_check[1]
